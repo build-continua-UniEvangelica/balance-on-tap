@@ -32,15 +32,15 @@ const TransactionModal = ({ isOpen, onClose, onConfirm, type }: TransactionModal
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[360px] rounded-xl bg-white">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-lg font-light text-gray-900">
             {type === 'credit' ? 'Adicionar Crédito' : 'Realizar Débito'}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="amount">Valor</Label>
+            <Label htmlFor="amount" className="text-gray-700">Valor</Label>
             <Input
               id="amount"
               type="number"
@@ -49,16 +49,20 @@ const TransactionModal = ({ isOpen, onClose, onConfirm, type }: TransactionModal
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              className="col-span-3"
+              className="bg-gray-50 text-gray-900"
             />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose}
+              className="rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+            >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className={type === 'credit' ? 'bg-green-500' : 'bg-blue-500'}
+              className={type === 'credit'
+                ? 'bg-gray-900 text-white rounded-md hover:bg-gray-800'
+                : 'bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300'}
             >
               Confirmar
             </Button>

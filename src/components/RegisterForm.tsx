@@ -14,52 +14,54 @@ const RegisterForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Em uma aplicação real, você enviaria estes dados para um backend
     localStorage.setItem('user', JSON.stringify({ name, email, balance: 0 }));
     navigate('/dashboard');
   };
 
   return (
-    <Card className="w-[400px] max-w-[90%]">
-      <CardHeader>
-        <CardTitle>Criar Conta</CardTitle>
-        <CardDescription>
+    <Card className="w-[370px] max-w-[95%] glass shadow-lg border border-gray-200">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl font-light text-gray-900 mb-1">Criar Conta</CardTitle>
+        <CardDescription className="text-gray-500 font-normal">
           Preencha seus dados para começar a usar o banco
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Nome</Label>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-1.5">
+            <Label htmlFor="name" className="text-gray-700">Nome</Label>
             <Input
               id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              className="bg-gray-50 text-gray-900"
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-gray-700">Email</Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="bg-gray-50 text-gray-900"
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-gray-700">Senha</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="bg-gray-50 text-gray-900"
             />
           </div>
-          <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+          <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-md transition-all">
             Criar Conta
           </Button>
         </form>
