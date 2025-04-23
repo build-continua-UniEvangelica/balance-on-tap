@@ -1,24 +1,27 @@
-name: deploy git hub pages
+name: Deploy para GitHub Pages
 
 on:
   push:
-    branches: [main]
-    
+    branches: [ main ]
+
 permissions:
   contents: write
 
-jobs: 
-- name: Checkout
-  uses: actions/checkout@v3
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-- name: Instalar dependências
-  run: npm install
+      - name: Instalar dependências
+        run: npm install
 
-- name: Build do projeto
-  run: npm run build
+      - name: Build do projeto
+        run: npm run build
 
-- name: Deploy no GitHub Pages
-  uses: peaceiris/actions-gh-pages@v3
-  with:
-    github_token: ${{ secrets.GITHUB_TOKEN }}
-    publish_dir: ./dist
+      - name: Deploy no GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
