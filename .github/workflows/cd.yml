@@ -48,5 +48,8 @@ jobs:
         with:
           node-version: 18
 
+      - name: Instalar dependências
+        run: npm ci
+
       - name: Deploy para GitHub Pages
         run: npm run deploy
