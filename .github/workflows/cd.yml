@@ -33,6 +33,11 @@ jobs:
       - name: Build do projeto com Vite
         run: npm run build
 
+      - name: Upload dos arquivos para deploy
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -40,16 +45,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
-
-      - name: Setup do Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Instalar dependências
-        run: npm ci
-
       - name: Deploy para GitHub Pages
-        run: npm run deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
