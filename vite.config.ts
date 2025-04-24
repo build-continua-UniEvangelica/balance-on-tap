@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  base: 'balance-on-tap',
+  base: '/balance-on-tap/',
   plugins: [
     react(),
     mode === 'development' &&
