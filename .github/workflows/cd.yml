@@ -38,8 +38,27 @@ jobs:
         with:
           path: ./dist
 
-  deploy:
+  test: 
     needs: build
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup nodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar os testes
+        run: npx playwright tests
+
+  deploy:
+    needs: [build, test]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
