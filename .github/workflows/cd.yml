@@ -53,7 +53,10 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      - name: Rodar os testes
+      - name: Instalar playwright runner
+        run: npx playwright install
+
+      - name: Rodar testes
         run: npm run test
 
   deploy:
