@@ -1,10 +1,10 @@
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import TransactionModal from './TransactionModal';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, WalletCards } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TransactionModal from './TransactionModal';
 
 export interface Transaction {
   type: 'credit' | 'debit';
@@ -53,10 +53,10 @@ const Dashboard = () => {
     <div className="space-y-6 w-full max-w-[400px] md:max-w-[600px] mx-auto">
       <Card className="bg-white/60 glass border border-gray-200 shadow-md">
         <CardHeader>
-          <CardTitle className="text-base font-semibold text-gray-700">Saldo Atual</CardTitle>
+          <CardTitle role="heading" className="text-base font-semibold text-gray-700">Saldo Atual</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-3xl font-light text-gray-900 select-none">R$ {balance.toFixed(2)}</p>
+          <p className="text-3xl font-light text-gray-900 select-none" data-testid="balance">R$ {balance.toFixed(2)}</p>
         </CardContent>
       </Card>
       <div className="grid grid-cols-2 gap-3">
@@ -104,6 +104,7 @@ const Dashboard = () => {
                 </div>
                 <div className="flex items-center space-x-4">
                   <span
+                  data-testid="transaction-amount"
                     className={
                       transaction.type === 'credit'
                         ? 'text-gray-900'

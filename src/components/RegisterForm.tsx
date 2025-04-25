@@ -1,9 +1,9 @@
 
-import { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
@@ -21,7 +21,7 @@ const RegisterForm = () => {
   return (
     <Card className="w-[370px] max-w-[95%] glass shadow-lg border border-gray-200">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xl font-light text-gray-900 mb-1">Criar Conta</CardTitle>
+        <CardTitle className="text-xl font-light text-gray-900 mb-1" role='heading'>Criar Conta</CardTitle>
         <CardDescription className="text-gray-500 font-normal">
           Preencha seus dados para começar a usar o banco
         </CardDescription>
