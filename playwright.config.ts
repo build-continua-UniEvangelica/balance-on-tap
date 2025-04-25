@@ -13,6 +13,15 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: '././src/tests',
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:8080/balance-on-tap/',
+    reuseExistingServer: false,
+    timeout: 120 * 100
+  },
+  use:{
+    baseURL: 'http://localhost:8080/balance-on-tap/'
+  },
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
