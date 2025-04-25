@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "test": "npx playwright test"
   },
   "homepage": "https://build-continua-unievangelica.github.io/balance-on-tap/",
   "dependencies": {

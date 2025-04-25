@@ -40,7 +40,6 @@ jobs:
 
   test: 
     needs: build
-    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
@@ -55,7 +54,7 @@ jobs:
         run: npm ci
 
       - name: Rodar os testes
-        run: npx playwright tests
+        run: npm run test
 
   deploy:
     needs: [build, test]
