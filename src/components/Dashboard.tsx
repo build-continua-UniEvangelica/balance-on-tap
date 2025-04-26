@@ -22,7 +22,6 @@ const Dashboard = () => {
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
-      navigate('/');
       return;
     }
     const userData = JSON.parse(user);
