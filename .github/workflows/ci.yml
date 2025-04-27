@@ -6,9 +6,6 @@ on:
 
 jobs: 
   build:
-    environment: 
-      name: HOME
-      url: /root
     runs-on: ubuntu-latest
     container: 
       image: node:20
@@ -37,5 +34,7 @@ jobs:
         run: npx playwright install --with-deps 
 
       - name: Run tests
+        env:
+          HOME: /root
         run: npx playwright test
     
