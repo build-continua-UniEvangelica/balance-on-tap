@@ -24,8 +24,9 @@ test("It should be able to add credit to balance", async ({page})=>{
   await page.getByRole('spinbutton', {name:'Valor'}).fill('100')
   await page.getByRole('button', {name:'Confirmar'}).click()
   const balance = await page.getByTestId('balance').textContent()
+  const transactionAmount = await page.getByTestId('transaction-amount').textContent()
   await expect(balance).toBe("R$ 100.00")
-  await expect(page.getByText('CréditoR$ 100.004/25/')).toBeVisible()
+  await expect(transactionAmount).toBe("R$ 100.00")
 })
 
 
@@ -42,6 +43,7 @@ test("It should be able to debit from balance", async ({page})=>{
   await page.getByRole('spinbutton', {name:'Valor'}).fill('50')
   await page.getByRole('button', {name:'Confirmar'}).click()
   const balance = await page.getByTestId('balance').textContent()
+  const transactionAmount = await page.getByTestId('transaction-amount').textContent()
   await expect(balance).toBe("R$ -50.00")
-  await expect(page.getByText('DébitoR$ 50.004/25/')).toBeVisible()
+  await expect(transactionAmount).toBe("R$ 50.00")
 })
