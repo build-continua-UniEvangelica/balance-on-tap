@@ -1,0 +1,39 @@
+name: Integração contínua
+
+on: 
+  push: 
+    branches:  [main]
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    container: 
+      image: node:20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: 
+          node-version: 20
+        
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build project
+        run: npm run build
+
+  Tests:
+    runs-on: ubuntu-latest
+    container: 
+      image: node:20
+    steps:
+      - name: Checkout
+        uses: 'actions/checkout@v4'
+        with: 
+          node-version: 20
+
+      - name: Setup tests
+        run: npx install playwright --with-deps
+
+      - name: Run tests
+        run: npx playwright test
+    
