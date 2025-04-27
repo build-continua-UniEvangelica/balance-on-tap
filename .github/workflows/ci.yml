@@ -32,7 +32,7 @@ jobs:
           node-version: 20
 
       - name: Setup tests
-        run: npx install playwright --with-deps
+        run: npx playwright install --with-deps 
 
       - name: Run tests
         run: npx playwright test
