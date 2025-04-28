@@ -18,29 +18,32 @@ O objetivo da atividade é compreender como funciona o GitHub Actions e como ele
 
 ### Definições iniciais
 
+#### Aqui é definido o nome do nosso pipeline, apenas para referenciar quando executado nas actions do GitHub
 ```yaml
-# Aqui é o nome do nosso pipeline, apenas para referenciar quando executado nas actions do GitHub
 name: Deploy Vite para GitHub Pages
+```
 
-# Aqui definimos o evento/trigger que irá iniciar o pipeline
-# Nesse caso estamos executando a cada push para a branch main
+#### Aqui definimos o evento/trigger que irá iniciar o pipeline. Nesse caso estamos executando a cada push para a branch main
+```yaml
 on:
   push:
     branches: ["main"]
 ```
 
+#### Definimos as permissões necessárias para criação de GitHub Pages
 ```yaml
-# Definimos as permissões necessárias para criação de GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
+```
 
-# Garantimos que apenas um deploy ocorra por vez
+#### Garantimos que apenas um deploy ocorra por vez
+````yaml
 concurrency:
   group: "pages"
   cancel-in-progress: false
-```
+````
 
 ---
 
@@ -150,5 +153,13 @@ Antes de executarmos o fluxo, **é necessário ir nas configurações do reposit
 
 - Vá em **Settings** → **Pages** → **Build and Deployment**
 - Selecione "**GitHub Actions**" como a fonte de deploy.
+
+### 📋 Requisitos da atividade
+
+- O pipeline deve ser executado a cada push na branch `main`.
+- O pipeline deve ter três jobs: `build`, `test` e `deploy`.
+- O job `build` deve gerar o conteúdo do projeto e salvá-lo para o deploy.
+- O job `test` deve rodar os testes automatizados.
+- O job `deploy` deve publicar o conteúdo gerado pelo job `build` no GitHub Pages.
 
 ---
