@@ -1,73 +1,154 @@
-# Welcome to your Lovable project
+# 🚀 Atividade - Configuração de Pipeline CI/CD com GitHub Actions
 
-## Project info
+O objetivo da atividade é compreender como funciona o GitHub Actions e como ele pode ser aplicado para construir uma pipeline de build e deploy contínuo.
 
-**URL**: https://lovable.dev/projects/0d877d9f-bb36-4bcf-941a-368097fb4734
+### 🛠️ Passo a passo
 
-## How can I edit this code?
+1. Gere um repositório aceitando a atividade no GitHub Classroom.
+2. Clone o repositório em sua máquina local.
+3. Instale as dependências usando `npm install`.
+4. Na raiz do projeto, crie uma pasta `.github`.
+5. Dentro da pasta `.github`, crie outra pasta chamada `workflows`.
+6. Crie um arquivo chamado `CI_CD.yml` dentro de `workflows`.
+7. Insira o conteúdo do pipeline abaixo e siga as instruções.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 🛠️ Arquivo `CI_CD.yml` Explicado
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0d877d9f-bb36-4bcf-941a-368097fb4734) and start prompting.
+### Definições iniciais
 
-Changes made via Lovable will be committed automatically to this repo.
+```yaml
+# Aqui é o nome do nosso pipeline, apenas para referenciar quando executado nas actions do GitHub
+name: Deploy Vite para GitHub Pages
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# Aqui definimos o evento/trigger que irá iniciar o pipeline
+# Nesse caso estamos executando a cada push para a branch main
+on:
+  push:
+    branches: ["main"]
 ```
 
-**Edit a file directly in GitHub**
+```yaml
+# Definimos as permissões necessárias para criação de GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+# Garantimos que apenas um deploy ocorra por vez
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+```
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Job de Build
 
-## What technologies are used for this project?
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
 
-This project is built with:
+      - name: Setup do Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+      - name: Instalar dependências
+        run: npm ci
 
-## How can I deploy this project?
+      - name: Build do projeto com Vite
+        run: npm run build
 
-Simply open [Lovable](https://lovable.dev/projects/0d877d9f-bb36-4bcf-941a-368097fb4734) and click on Share -> Publish.
+      - name: Upload dos arquivos para deploy
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+```
 
-## Can I connect a custom domain to my Lovable project?
+**Explicação:**
 
-Yes, you can!
+- Fazemos o checkout do repositório.
+- Preparamos o ambiente Node.js.
+- Instalamos as dependências do projeto.
+- Executamos o comando de build para gerar o conteúdo final.
+- Salvamos o resultado para uso posterior no deploy.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Job de Teste
+
+```yaml
+test:
+  needs: build
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Setup nodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Instalar dependências
+      run: npm ci
+
+    - name: Instalar playwright runner
+      run: npx playwright install --with-deps
+
+    - name: Rodar testes
+      run: npx playwright test
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
+```
+
+**Explicação:**
+
+- Rodamos novamente o checkout e o setup do Node.js.
+- Instalamos dependências necessárias para rodar testes automatizados.
+- Rodamos os testes usando Playwright.
+- Salvamos o relatório de testes como artefato.
+
+---
+
+### Job de Deploy
+
+```yaml
+deploy:
+  needs: [build, test]
+  runs-on: ubuntu-latest
+  environment:
+    name: github-pages
+    url: ${{ steps.deployment.outputs.page_url }}
+  steps:
+    - name: Deploy para GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+```
+
+**Explicação:**
+
+- Só será executado se o build e os testes forem concluídos com sucesso.
+- Publica o projeto gerado no GitHub Pages automaticamente.
+
+---
+
+### 🎯 últimas configurações
+
+Antes de executarmos o fluxo, **é necessário ir nas configurações do repositório**:
+
+- Vá em **Settings** → **Pages** → **Build and Deployment**
+- Selecione "**GitHub Actions**" como a fonte de deploy.
+
+---
