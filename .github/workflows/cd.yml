@@ -19,7 +19,11 @@ jobs:
   test: 
     needs: [build]
     runs-on: ubuntu-latest
+    container:
+      image: node:20
     steps:
+      - uses: 'actions/checkout@v4'
+      - run: npm ci
       - run: npx playwright install --with-deps
       - run: npx playwright test
     
