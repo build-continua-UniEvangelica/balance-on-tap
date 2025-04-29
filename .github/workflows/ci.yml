@@ -1,0 +1,47 @@
+name: 'Deploy de projeto vite no github pages'
+
+on: 
+  push: 
+    branches: main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: 
+      image: node:20
+    steps:
+      - name: 'Checkout do projeto'
+        uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
+  
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npx playwright test
+
+  deploy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    permissions: 
+      pages: write
+      id-token: write 
+    environment: 
+      name: github-pages
+      url: ${{ steps.deployment.outputs.pages_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment
+
+
+    
+        
