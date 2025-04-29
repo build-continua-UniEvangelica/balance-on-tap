@@ -4,17 +4,20 @@ on:
   push: 
     branches: main
 
+permissions: 
+  pages: write
+  id-token: write 
+
 jobs:
   build:
     runs-on: ubuntu-latest
     container: 
       image: node:20
     steps:
-      - name: 'Checkout do projeto'
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - run: npm ci
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
   
@@ -32,9 +35,6 @@ jobs:
   deploy:
     needs: [build, test]
     runs-on: ubuntu-latest
-    permissions: 
-      pages: write
-      id-token: write 
     environment: 
       name: github-pages
       url: ${{ steps.deployment.outputs.pages_url }}
